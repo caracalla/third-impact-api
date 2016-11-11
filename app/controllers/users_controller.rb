@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_current_user, except: [:create, :show]
+  before_action :require_valid_user, except: [:create, :show]
   before_action :require_user_or_admin, only: [:update, :destroy]
 
   def create

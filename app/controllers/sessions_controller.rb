@@ -6,10 +6,10 @@ class SessionsController < ApplicationController
     )
 
     if user.nil?
-      render json: { message: "Invalid credentials" }, status: 401
+      render json: { errors: ["Invalid credentials"] }, status: 401
     else
       login!(user)
-      render json: user
+      render json: user, serializer: User::AuthenticationSerializer
     end
   end
 

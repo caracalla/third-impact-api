@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :require_current_user, only: [:create]
+  before_action :require_valid_user, only: [:create]
   before_action :require_author_or_admin, only: [:update, :destroy]
 
   def create
@@ -14,9 +14,9 @@ class PostsController < ApplicationController
 
   def index
     if params[:user_id].present?
-      render json: User.find(params[:user_id]).posts
+      render json: User.find(params[:user_id]).posts.order(created_at: :desc)
     else
-      render json: Post.all
+      render json: Post.all.order(created_at: :desc)
     end
   end
 

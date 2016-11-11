@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :require_current_user, except: [:create]
+  before_action :require_valid_user, except: [:create]
   before_action :require_author_or_admin, only: [:update, :destroy]
 
   def create
