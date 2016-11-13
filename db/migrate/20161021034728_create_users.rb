@@ -5,11 +5,13 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :email,            null: false
       t.string :password_digest,  null: false
       t.string :session_token,    null: false
+      t.string :auth_token,       null: false
       t.boolean :admin,           null: false, default: false
 
       t.index :username,          unique: true
       t.index :email,             unique: true
       t.index :session_token,     unique: true
+      t.index :auth_token,        unique: true
 
       t.timestamps
     end

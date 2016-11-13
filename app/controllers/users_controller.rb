@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 
     if user.save
       login!(user)
-      render json: user
+      render json: user, serializer: User::AuthenticationSerializer
     else
       render json: { errors: user.errors }, status: 422
     end

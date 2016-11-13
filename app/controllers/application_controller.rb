@@ -41,7 +41,7 @@ class ApplicationController < ActionController::API
     if request.headers.key?("X-Auth-Email")
       user = User.find_by(email: request.headers["X-Auth-Email"])
 
-      if user.auth_token == request.headers["X-Auth-Token"]
+      if user.present? && user.auth_token == request.headers["X-Auth-Token"]
         return true
       end
     end
