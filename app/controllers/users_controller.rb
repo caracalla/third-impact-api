@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_valid_user, except: [:create, :show]
-  before_action :require_user_or_admin, only: [:update, :destroy]
+  before_action -> { require_specific_user_or_admin(user) }, only: [:update, :destroy]
 
   def create
     user = User.new(user_params)
@@ -50,9 +50,5 @@ class UsersController < ApplicationController
 
   def user
     @user ||= User.find_by(id: params[:id])
-  end
-
-  def require_user_or_admin
-    render status: 403 unless current_user == user || current_user.admin?
   end
 end

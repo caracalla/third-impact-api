@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :require_valid_user, only: [:create]
-  before_action :require_author_or_admin, only: [:update, :destroy]
+  before_action -> { require_specific_user_or_admin(post.user) }, only: [:update, :destroy]
 
   def create
     post = current_user.posts.new(post_params)
@@ -45,9 +45,5 @@ class PostsController < ApplicationController
   def post
     # Is it okay for this method to return nil?  Should we use `find` instead?
     @post ||= Post.find_by(id: params[:id])
-  end
-
-  def require_author_or_admin
-    render status: 403 unless current_user == post.user || current_user.admin?
   end
 end

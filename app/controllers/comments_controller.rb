@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_action :require_valid_user, except: [:create]
-  before_action :require_author_or_admin, only: [:update, :destroy]
+  before_action -> { require_specific_user_or_admin(comment.user) }, only: [:update, :destroy]
 
   def create
     comment = current_user.comments.new(comment_params)
@@ -54,9 +54,5 @@ class CommentsController < ApplicationController
 
   def comment
     @comment ||= Comment.find_by(id: params[:id])
-  end
-
-  def require_author_or_admin
-    render status: 403 unless current_user == comment.user || current_user.admin?
   end
 end

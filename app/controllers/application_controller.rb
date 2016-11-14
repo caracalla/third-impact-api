@@ -49,6 +49,10 @@ class ApplicationController < ActionController::API
     return false
   end
 
+  def require_specific_user_or_admin(user)
+    render status: 403 unless current_user == user || current_user.try(:admin?)
+  end
+
   def artificial_delay
     sleep(0.5)
   end
