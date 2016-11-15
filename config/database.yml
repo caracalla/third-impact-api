@@ -66,4 +66,4 @@ production:
   <<: *default
   database: third-impact-prod
   username: third-impact-api
-  password: <%= ENV['THIRD-IMPACT-API_DATABASE_PASSWORD'] %>
+  password: <%= ENV['THIRD_IMPACT_API_DATABASE_PASSWORD'] %>
