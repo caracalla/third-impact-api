@@ -1,0 +1,75 @@
+apt-get update -y
+apt-get upgrade -y
+apt-get install -y git vim curl ntp nfs-kernel-server autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev libpq-dev
+update-alternatives --config editor
+vim /etc/network/interfaces
+  # This file describes the network interfaces available on your system
+  # and how to activate them. For more information, see interfaces(5).
+
+  source /etc/network/interfaces.d/*
+
+  # The loopback network interface
+  auto lo
+  iface lo inet loopback
+
+  # The primary network interface
+  # allow-hotplug eth0
+  auto eth0
+  iface eth0 inet dhcp
+
+  # Secondary host-only network interface
+  auto eth1
+  iface eth1 inet static
+  address 192.168.56.102
+  netmask 255.255.255.0
+/etc/init.d/networking restart
+
+# Set up SSh
+vim /etc/ssh/sshd_config
+  Change the "PermitRootLogin" option from "without-password" to "yes"
+service sshd restart
+vim /root/.ssh/authorized_keys
+  paste public key from host
+
+# Set up NFS
+vim /etc/exports
+  /var/caracalla Leviathan.local(rw,async,insecure,nohide,no_subtree_check,all_squash,anonuid=0,anongid=0)
+vim /etc/hosts
+  192.168.56.1 Leviathan.local
+/etc/init.d/nfs-kernel-server restart
+
+# Set up Ruby
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+cd ~/.rbenv && src/configure && make -C src
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
+source ~/.profile
+~/.rbenv/bin/rbenv init
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+rbenv install -l # list ruby versions available
+
+# Set up Postgres
+vim /etc/postgres/X.Y/main/pg_hba.conf
+  change `peer` to `trust` on local connections
+adduser third-impact
+su postgres
+createuser third-impact
+psql
+  alter user "third-impact" with createdb;
+rails db:create
+rails db:migrate
+
+vim config/environments/development.rb
+  config.logger = Logger.new(STDOUT)
+
+vim /etc/nginx/nginx.conf
+  events {
+  }
+
+  http {
+    server {
+      location / {
+        # root /var;
+        proxy_pass http://localhost:3000;
+      }
+    }
+  }
