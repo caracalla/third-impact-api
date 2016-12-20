@@ -1,6 +1,6 @@
 apt-get update -y
 apt-get upgrade -y
-apt-get install -y git vim curl ntp nfs-kernel-server autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev libpq-dev
+apt-get install -y git vim curl ntp sudo nfs-kernel-server autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev libpq-dev
 update-alternatives --config editor
 vim /etc/network/interfaces
   # This file describes the network interfaces available on your system

@@ -12,6 +12,10 @@ class PostsController < ApplicationController
     end
   end
 
+  def show
+    render json: post
+  end
+
   def index
     if params[:user_id].present?
       render json: User.find(params[:user_id]).posts.order(created_at: :desc)
